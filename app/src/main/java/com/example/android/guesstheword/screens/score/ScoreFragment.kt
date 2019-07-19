@@ -32,6 +32,7 @@ import com.example.android.guesstheword.databinding.ScoreFragmentBinding
 /**
  * Fragment where the final score is shown, after the game is over
  */
+@Suppress("UsePropertyAccessSyntax")
 class ScoreFragment : Fragment() {
 
     private lateinit var viewModelFactory: ScoreViewModelFactory
@@ -51,6 +52,8 @@ class ScoreFragment : Fragment() {
                 false
         )
 
+        binding.setLifecycleOwner(this)
+
         // Get args using by navArgs property delegate
         val scoreFragmentArgs by navArgs<ScoreFragmentArgs>()
 
@@ -58,9 +61,7 @@ class ScoreFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ScoreViewModel::class.java)
 
-        viewModel.score.observe(this, Observer { totalScore ->
-            binding.scoreText.text = totalScore.toString()
-        })
+        binding.scoreViewModel = viewModel
 
         viewModel.eventPlayAgain.observe(this, Observer { playAgain ->
             if (playAgain) binding.playAgainButton.setOnClickListener { onPlayAgain() }
